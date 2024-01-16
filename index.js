@@ -18,9 +18,12 @@ userInterface.on("line", async input => {
   const model = genAI.getGenerativeModel({ model: "gemini-pro"});
 
   const result = await model.generateContentStream([input]);
-  for await(const chunk of result.stream){
+
+  let text = '';
+  for await (const chunk of result.stream) {
     const chunkText = chunk.text();
-    console.log(chunkText)
+    console.log(chunkText);
+    text += chunkText;
   }
 
 
