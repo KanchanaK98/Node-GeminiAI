@@ -17,11 +17,10 @@ userInterface.on("line", async input => {
   // For text-only input, use the gemini-pro model
   const model = genAI.getGenerativeModel({ model: "gemini-pro"});
 
-  let text = '';
-  for await (const chunk of result.stream) {
+  const result = await model.generateContentStream([input]);
+  for await(const chunk of result.stream){
     const chunkText = chunk.text();
-    console.log(chunkText);
-    text += chunkText;
+    console.log(chunkText)
   }
 
 
