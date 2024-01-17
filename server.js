@@ -1,10 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-//const { processText, processImage } = require('./yourTextScript');
+const cors = require('cors');
 const app = express();
 
 const sendResponse = require("./Routes/mainRoute")
-
+// Enable CORS
+app.use(cors());
 app.use(bodyParser.json());
 
 

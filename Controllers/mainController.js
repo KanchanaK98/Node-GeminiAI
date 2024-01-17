@@ -1,12 +1,14 @@
 exports.createResponse = async (req, res) => {
     console.log("start response...");
-    console.log(req.body);
-    const { text } = req.body;
+    //console.log(req.body);
+    let { text } = req.body;
+    let {count} = req.body;
   
     if (text === "") {
       return res.status(200).json({ message: "Incomplete text inputted", success: false });
     }
-  
+
+    let responseText = '';
     try {
       const { GoogleGenerativeAI } = require("@google/generative-ai");
       const dotenv = require("dotenv");
@@ -24,14 +26,15 @@ exports.createResponse = async (req, res) => {
   
       
         const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-  
+        text = "Write an essay about "+text+" .Maximum Word count is "+count;
+        console.log("Text : "+text);
         try {
           const result = await model.generateContentStream(text);
   
-          let responseText = '';
+          
           for await (const chunk of result.stream) {
             const chunkText = chunk.text();
-            console.log(chunkText);
+            //console.log(chunkText);
             responseText += chunkText;
           }
   
@@ -47,6 +50,6 @@ exports.createResponse = async (req, res) => {
     }
   
     // You might want to return a response indicating that the generation process has started
-    return res.status(200).json({ message: "Text generation process started", success: true });
+    return res.status(200).json({ message: responseText, success: true });
   };
   
