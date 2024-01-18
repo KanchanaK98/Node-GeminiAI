@@ -186,8 +186,8 @@ export default function Main() {
             onClose={handleClose}
             aria-labelledby="responsive-dialog-title"
           >
-            <DialogTitle  id="responsive-dialog-title">
-            <Typography variant='h5' align='center'>{text}</Typography>
+            <DialogTitle sx={{ borderBottom: 1,borderColor: 'primary.main', borderRadius:'16px' }} id="responsive-dialog-title">
+            <Typography variant='h5' align='center'>Essay about {text}</Typography>
             </DialogTitle>
             <DialogContent>
               <DialogContentText>
