@@ -42,6 +42,8 @@ export default function Main() {
     const [text, setText] = React.useState('');
     const [count, setCount] = React.useState('');
     const [essay, setEssay] = React.useState('');
+    const [loading, setLoading] = React.useState(false);
+
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -53,6 +55,7 @@ export default function Main() {
       };
 
   const handleClickOpen = async () => {
+    setLoading(true);
     try {
         const response = await axios.post('http://localhost:5000/text/processText', {
           text: text,
@@ -60,9 +63,9 @@ export default function Main() {
         });
         console.log(response);
         setEssay(response.data.message);
+        setLoading(false);
       } catch (error) {
         console.error('Error generating essay:', error);
-        // Handle error gracefully (e.g., display error message)
       }
 
     setOpen(true);
@@ -70,10 +73,10 @@ export default function Main() {
   };
 
   const handleClose = () => {
-    setText("")
+    setOpen(false);
     setCount("")
     setEssay("")
-    setOpen(false);
+    setText("")
     console.log("Close")
   };
 
@@ -126,10 +129,9 @@ export default function Main() {
               />
               <TextField
                 margin="normal"
-                required
                 fullWidth
                 name="count"
-                label="Word Count"
+                label="Other Details"
                 id="count"
                 value={count} 
                 onChange={handleCountChange}
@@ -140,6 +142,7 @@ export default function Main() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
                 onClick={handleClickOpen}
+                disabled={text?false:true}
               >
                 Submit
               </Button>
@@ -150,29 +153,47 @@ export default function Main() {
         </Grid>
       </Grid>
     </ThemeProvider>
-    <Dialog
-        fullScreen={fullScreen}
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="responsive-dialog-title"
-      >
-        <DialogTitle id="responsive-dialog-title">
-          {text}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            {essay}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={handleClose}>
-            Cancel
-          </Button>
-          <Button onClick={handleClickOpen} autoFocus>
-            Regenerate
-          </Button>
-        </DialogActions>
-      </Dialog>
+    {loading ? (
+            <Box sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '100vh', // Set the height to 100% of the viewport
+                position: 'fixed', // Use a fixed position to overlay on top of the content
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: 'rgba(255, 255, 255, 0.8)', // Semi-transparent white background
+                zIndex: 999, // Set a higher z-index to make sure it's on top
+            }}>
+            <CircularProgress />
+          </Box>
+        ):(<Dialog
+            fullScreen={fullScreen}
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="responsive-dialog-title"
+          >
+            <DialogTitle disableTypography id="responsive-dialog-title">
+            <Typography variant="h5" align='center'>{text}</Typography>
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                {essay}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button autoFocus onClick={handleClose}>
+                Cancel
+              </Button>
+              <Button onClick={handleClickOpen} autoFocus>
+                Regenerate
+              </Button>
+            </DialogActions>
+          </Dialog>)}
+    
     </>
   );
 }
