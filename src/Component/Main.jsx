@@ -29,7 +29,6 @@ function Copyright(props) {
         Kanchana Kariyawasam
       </Link>{' '}
       {new Date().getFullYear()}
-      {'.'}
     </Typography>
   );
 }
@@ -74,8 +73,12 @@ export default function Main() {
 
   const handleClose = () => {
     setOpen(false);
+    
     setCount("")
-    setEssay("")
+    setTimeout(() => {
+        // Update state after 2 seconds
+        setEssay("")
+    }, 2000); 
     setText("")
     console.log("Close")
   };
@@ -89,7 +92,7 @@ export default function Main() {
           item
           xs={false}
           sm={4}
-          md={7}
+          md={5}
           sx={{
             backgroundImage: 'url(https://source.unsplash.com/random?wallpapers)',
             backgroundRepeat: 'no-repeat',
@@ -99,7 +102,7 @@ export default function Main() {
             backgroundPosition: 'center',
           }}
         />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <Grid item xs={12} sm={8} md={7} component={Paper} elevation={6} square>
           <Box
             sx={{
               my: 8,
@@ -147,9 +150,16 @@ export default function Main() {
                 Submit
               </Button>
               
-              <Copyright sx={{ mt: 5 }} />
+              
             </Box>
+            <Grid container component="footer" justifyContent="center" sx={{ position: 'fixed', bottom: 0, width: '100%', padding: 2 }}>
+          <Copyright sx={{ mt: 5 }} />
+          </Grid>
+            
           </Box>
+         
+          
+          
         </Grid>
       </Grid>
     </ThemeProvider>
@@ -176,8 +186,8 @@ export default function Main() {
             onClose={handleClose}
             aria-labelledby="responsive-dialog-title"
           >
-            <DialogTitle disableTypography id="responsive-dialog-title">
-            <Typography variant="h5" align='center'>{text}</Typography>
+            <DialogTitle  id="responsive-dialog-title">
+            <Typography variant='h5' align='center'>{text}</Typography>
             </DialogTitle>
             <DialogContent>
               <DialogContentText>
@@ -185,10 +195,10 @@ export default function Main() {
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button autoFocus onClick={handleClose}>
+              <Button variant="outlined" autoFocus onClick={handleClose}>
                 Cancel
               </Button>
-              <Button onClick={handleClickOpen} autoFocus>
+              <Button variant="contained" onClick={handleClickOpen} autoFocus>
                 Regenerate
               </Button>
             </DialogActions>
