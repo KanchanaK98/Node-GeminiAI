@@ -3,6 +3,8 @@ exports.createResponse = async (req, res) => {
     //console.log(req.body);
     let { text } = req.body;
     let {count} = req.body;
+    //console.log("count "+count)
+    
   
     if (text === "") {
       return res.status(200).json({ message: "Incomplete text inputted", success: false });
@@ -26,7 +28,7 @@ exports.createResponse = async (req, res) => {
   
       
         const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-        text = "Write an essay about "+text+" .Maximum Word count is "+count;
+        text = "Write an essay about "+text+" . "+count;
         console.log("Text : "+text);
         try {
           const result = await model.generateContentStream(text);
